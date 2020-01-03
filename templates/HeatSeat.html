@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gra Domek</title>
+</head>
+<body>
+<div id="domek">
+    <div>
+
+  <table>
+{% for t in domek %}
+    <tr>
+    {% for i in domek[t] %}
+        <td><img src="../static/images/{{ i }}.png" alt="karta"></td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+ </table>
+    </div>
+</div>
+</body>
+</html>
