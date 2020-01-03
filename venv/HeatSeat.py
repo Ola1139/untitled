@@ -6,7 +6,6 @@ app = Flask(__name__)
 
 @app.route('/HeatSeat')
 def HeatSeat():
-
     class Gracze():
         def __init__(self, nazwa):
             self.nazwa = nazwa
@@ -14,6 +13,35 @@ def HeatSeat():
         punkty = 0
         domek = {}
         dach = []
+
+    def zmianaDruzyny(Druzyna, numer):
+        if numer == 1:
+            zmienna = Druzyna[0]
+            Druzyna[0] = Druzyna[1]
+            Druzyna[1] = Druzyna[2]
+            Druzyna[2] = Druzyna[3]
+            Druzyna[3] = zmienna
+        elif numer == 2:
+            zmienna = Druzyna[0]
+            zmienna2 = Druzyna[1]
+            Druzyna[0] = Druzyna[2]
+            Druzyna[1] = Druzyna[3]
+            Druzyna[2] = zmienna
+            Druzyna[3] = zmienna2
+        elif numer == 3:
+            zmienna = Druzyna[0]
+            Druzyna[0] = Druzyna[3]
+            Druzyna[3] = Druzyna[2]
+            Druzyna[2] = Druzyna[1]
+            Druzyna[1] = zmienna
+        return Druzyna
+
+    def runda(taliaPomieszczen, taliaDodatkow, druzyna, tura):
+        taliaPomieszczen1 = []
+        for x in taliaPomieszczen:
+            taliaPomieszczen1.append(x.nazwa)
+        return render_template('HeatSeat.html', taliaPomieszczen=taliaPomieszczen1, taliaDodatkow=taliaDodatkow,
+                               tura=tura)
 
     taliaKartPomieszczen = [karty.gabinet, karty.PokojGier, karty.biblioteka, karty.PokojDzieciecy1, karty.PokojDzieciecy2,
                             karty.PokojDzieciecy3, karty.PokojDzieciecy4, karty.PokojDzieciecy5, karty.PokojDzieciecy6,
@@ -27,7 +55,7 @@ def HeatSeat():
                             karty.sauna, karty.skladzik, karty.warsztat, karty.pralnia, karty.PiwniczkaNaWino, karty.garaz1,
                             karty.garaz2, karty.garaz3, karty.garaz4, karty.garaz5, karty.garaz6]
 
-    taliaKartDodatków = [karty.brazowyOkno, karty.brazowy1, karty.brazowy2, karty.brazowy3, karty.brazowy4, karty.brazowy5,
+    taliaKartDodatkow = [karty.brazowyOkno, karty.brazowy1, karty.brazowy2, karty.brazowy3, karty.brazowy4, karty.brazowy5,
                          karty.brazowy6, karty.fioletowyOkno, karty.fioletowy1, karty.fioletowy2, karty.fioletowy3,
                          karty.fioletowy4, karty.fioletowy5, karty.fioletowy6, karty.pomaranczowyOkno, karty.pomaranczowy1,
                          karty.pomaranczowy2, karty.pomaranczowy3, karty.pomaranczowy4, karty.pomaranczowy5, karty.pomaranczowy6,
@@ -62,56 +90,31 @@ def HeatSeat():
     gracz4.dach = Dach4
     gracz4.domek = Domek4
 
-    shuffle(taliaKartDodatków)
+    shuffle(taliaKartDodatkow)
     shuffle(taliaKartPomieszczen)
 
     Druzyna = [gracz1, gracz2, gracz3, gracz4]
-
-    def rozgrywka(taliaDodatkow, taliaPomieszczen, Druzyna):
-        tura = 1
-        numer = randint(0,4)
-        for x in Druzyna:
-            x.znacznikPierwszegoGracza = False
-        Druzyna[numer].znacznikPierwszegoGracza = True
-        Druzyna = zmianaDruzyny(Druzyna, numer)
-        for x in taliaPomieszczen:
-            biezacaTaliaPomieszczen = []
-            biezacaTaliaDodatkow = []
-            biezacaTaliaPomieszczen.extend([taliaPomieszczen[0],taliaPomieszczen[1], taliaPomieszczen[2], taliaPomieszczen[3],
-                                     taliaPomieszczen[4]])
-            biezacaTaliaDodatkow.extend([taliaDodatkow[0], taliaDodatkow[1], taliaDodatkow[2], taliaDodatkow[3]])
-            del taliaPomieszczen[:5]
-            del taliaDodatkow[:4]
-            runda(biezacaTaliaPomieszczen, biezacaTaliaDodatkow, Druzyna, tura)
-            tura = tura + 1
-
-    def zmianaDruzyny(Druzyna, numer):
-        if numer == 1:
-            zmienna = Druzyna[0]
-            Druzyna[0] = Druzyna[1]
-            Druzyna[1] = Druzyna[2]
-            Druzyna[2] = Druzyna[3]
-            Druzyna[3] = zmienna
-        elif numer == 2:
-            zmienna = Druzyna[0]
-            zmienna2 = Druzyna[1]
-            Druzyna[0] = Druzyna[2]
-            Druzyna[1] = Druzyna[3]
-            Druzyna[2] = zmienna
-            Druzyna[3] = zmienna2
-        elif numer == 3:
-            zmienna = Druzyna[0]
-            Druzyna[0] = Druzyna[3]
-            Druzyna[3] = Druzyna[2]
-            Druzyna[2] = Druzyna[1]
-            Druzyna[1] = zmienna
-        return Druzyna
+    tura = 1
+    numer = randint(0,3)
+    for x in Druzyna:
+        x.znacznikPierwszegoGracza = False
+    Druzyna[numer].znacznikPierwszegoGracza = True
+    Druzyna = zmianaDruzyny(Druzyna, numer)
+    for y in taliaKartPomieszczen:
+        biezacaTaliaPomieszczen = []
+        biezacaTaliaDodatkow = []
+        biezacaTaliaPomieszczen.extend([taliaKartPomieszczen[0],taliaKartPomieszczen[1], taliaKartPomieszczen[2], taliaKartPomieszczen[3],
+                                     taliaKartPomieszczen[4]])
+        biezacaTaliaDodatkow.extend([taliaKartDodatkow[0], taliaKartDodatkow[1], taliaKartDodatkow[2], taliaKartDodatkow[3]])
+        del taliaKartPomieszczen[:5]
+        del taliaKartDodatkow[:4]
+        tura = tura + 1
+    return runda(biezacaTaliaPomieszczen, biezacaTaliaDodatkow, Druzyna, tura)
 
 
-    def runda(taliaPomieszczen, taliaDodatkow, druzyna, tura):
-        render_template('HeatSeat.html', taliaPomieszczen = taliaPomieszczen, taliaDodatkow = taliaDodatkow, tura = tura)
 
-    return render_template('HeatSeat.html', domek = Domek1)
+
+
 
 if __name__ == '__main__':
     app.run(debug = True)

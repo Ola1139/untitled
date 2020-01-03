@@ -7,17 +7,22 @@
 <body>
 <div id="domek">
     <div>
-
-  <table>
-{% for t in domek %}
-    <tr>
-    {% for i in domek[t] %}
-        <td><img src="../static/images/{{ i }}.png" alt="karta"></td>
-    {% endfor %}
-    </tr>
+    {{ tura }}
+ <table>
+ <tr>
+     <td><img src="../static/images/znacznik.png" alt="karta"></td>
+     {% for t in taliaDodatkow %}
+        <td><img src="../static/images/{{ t.nazwa }}.png" alt="karta"></td>
+     {% endfor %}
+ </tr>
+ <tr>
+{% for t in taliaPomieszczen %}
+        <td><img src="../static/images/{{ t }}.png" alt="karta"></td>
 {% endfor %}
+ </tr>
  </table>
     </div>
+
 </div>
 </body>
 </html>
