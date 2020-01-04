@@ -23,6 +23,10 @@ def MP():
 def Zasady():
     return render_template('zasady.html')
 
+@app.route('/HeatSeat/<int:kartaPomieszczen>/<int:kartaDodatkow>')
+def runda(kartaPomieszczen, kartaDodatkow):
+    return HeatSeat.runda(kartaPomieszczen, kartaDodatkow)
+
 if __name__ == '__main__':
     app.run(debug = True)
 

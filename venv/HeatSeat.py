@@ -4,6 +4,29 @@ import karty
 
 app = Flask(__name__)
 
+
+def zmianaDruzyny(Druzyna, numer):
+    if numer == 1:
+        zmienna = Druzyna[0]
+        Druzyna[0] = Druzyna[1]
+        Druzyna[1] = Druzyna[2]
+        Druzyna[2] = Druzyna[3]
+        Druzyna[3] = zmienna
+    elif numer == 2:
+        zmienna = Druzyna[0]
+        zmienna2 = Druzyna[1]
+        Druzyna[0] = Druzyna[2]
+        Druzyna[1] = Druzyna[3]
+        Druzyna[2] = zmienna
+        Druzyna[3] = zmienna2
+    elif numer == 3:
+        zmienna = Druzyna[0]
+        Druzyna[0] = Druzyna[3]
+        Druzyna[3] = Druzyna[2]
+        Druzyna[2] = Druzyna[1]
+        Druzyna[1] = zmienna
+    return Druzyna
+
 @app.route('/HeatSeat')
 def HeatSeat():
     class Gracze():
@@ -13,35 +36,6 @@ def HeatSeat():
         punkty = 0
         domek = {}
         dach = []
-
-    def zmianaDruzyny(Druzyna, numer):
-        if numer == 1:
-            zmienna = Druzyna[0]
-            Druzyna[0] = Druzyna[1]
-            Druzyna[1] = Druzyna[2]
-            Druzyna[2] = Druzyna[3]
-            Druzyna[3] = zmienna
-        elif numer == 2:
-            zmienna = Druzyna[0]
-            zmienna2 = Druzyna[1]
-            Druzyna[0] = Druzyna[2]
-            Druzyna[1] = Druzyna[3]
-            Druzyna[2] = zmienna
-            Druzyna[3] = zmienna2
-        elif numer == 3:
-            zmienna = Druzyna[0]
-            Druzyna[0] = Druzyna[3]
-            Druzyna[3] = Druzyna[2]
-            Druzyna[2] = Druzyna[1]
-            Druzyna[1] = zmienna
-        return Druzyna
-
-    def runda(taliaPomieszczen, taliaDodatkow, druzyna, tura):
-        taliaPomieszczen1 = []
-        for x in taliaPomieszczen:
-            taliaPomieszczen1.append(x.nazwa)
-        return render_template('HeatSeat.html', taliaPomieszczen=taliaPomieszczen1, taliaDodatkow=taliaDodatkow,
-                               tura=tura)
 
     taliaKartPomieszczen = [karty.gabinet, karty.PokojGier, karty.biblioteka, karty.PokojDzieciecy1, karty.PokojDzieciecy2,
                             karty.PokojDzieciecy3, karty.PokojDzieciecy4, karty.PokojDzieciecy5, karty.PokojDzieciecy6,
@@ -100,16 +94,62 @@ def HeatSeat():
         x.znacznikPierwszegoGracza = False
     Druzyna[numer].znacznikPierwszegoGracza = True
     Druzyna = zmianaDruzyny(Druzyna, numer)
-    for y in taliaKartPomieszczen:
-        biezacaTaliaPomieszczen = []
-        biezacaTaliaDodatkow = []
-        biezacaTaliaPomieszczen.extend([taliaKartPomieszczen[0],taliaKartPomieszczen[1], taliaKartPomieszczen[2], taliaKartPomieszczen[3],
+    biezacaTaliaPomieszczen = []
+    biezacaTaliaDodatkow = []
+    biezacaTaliaPomieszczen.extend([taliaKartPomieszczen[0],taliaKartPomieszczen[1], taliaKartPomieszczen[2], taliaKartPomieszczen[3],
                                      taliaKartPomieszczen[4]])
-        biezacaTaliaDodatkow.extend([taliaKartDodatkow[0], taliaKartDodatkow[1], taliaKartDodatkow[2], taliaKartDodatkow[3]])
-        del taliaKartPomieszczen[:5]
-        del taliaKartDodatkow[:4]
-        tura = tura + 1
-    return runda(biezacaTaliaPomieszczen, biezacaTaliaDodatkow, Druzyna, tura)
+    biezacaTaliaDodatkow.extend([taliaKartDodatkow[0], taliaKartDodatkow[1], taliaKartDodatkow[2], taliaKartDodatkow[3]])
+    del taliaKartPomieszczen[:5]
+    del taliaKartDodatkow[:4]
+    return render_template('HeatSeat.html', taliaPomieszczen=biezacaTaliaPomieszczen, taliaDodatkow=biezacaTaliaDodatkow, tura=tura)
+
+@app.route('/HeatSeat/<int:kartaPomieszczen>/<int:kartaDodatkow>')
+def runda(kartaPomieszczen, kartaDodatkow):
+    taliaKartPomieszczen = [karty.gabinet, karty.PokojGier, karty.biblioteka, karty.PokojDzieciecy1,
+                            karty.PokojDzieciecy2,
+                            karty.PokojDzieciecy3, karty.PokojDzieciecy4, karty.PokojDzieciecy5, karty.PokojDzieciecy6,
+                            karty.PokojDzieciecy7, karty.PokojDzieciecy8, karty.kuchnia1, karty.kuchnia2,
+                            karty.kuchnia3,
+                            karty.kuchnia4, karty.kuchnia5, karty.kuchnia6, karty.kuchnia7, karty.kuchnia8,
+                            karty.sypialnia1,
+                            karty.sypialnia2, karty.sypialnia3, karty.sypialnia4, karty.sypialnia5, karty.sypialnia6,
+                            karty.sypialnia7, karty.sypialnia8, karty.lazienka1, karty.lazienka2, karty.lazienka3,
+                            karty.lazienka4, karty.lazienka5, karty.lazienka6, karty.lazienka7, karty.lazienka8,
+                            karty.salon1,
+                            karty.salon2, karty.salon3, karty.salon4, karty.salon5, karty.salon6, karty.salon7,
+                            karty.salon8,
+                            karty.salon9, karty.salon10, karty.salon11, karty.salon12, karty.spizarnia, karty.garderoba,
+                            karty.sauna, karty.skladzik, karty.warsztat, karty.pralnia, karty.PiwniczkaNaWino,
+                            karty.garaz1,
+                            karty.garaz2, karty.garaz3, karty.garaz4, karty.garaz5, karty.garaz6]
+
+    taliaKartDodatkow = [karty.brazowyOkno, karty.brazowy1, karty.brazowy2, karty.brazowy3, karty.brazowy4,
+                         karty.brazowy5,
+                         karty.brazowy6, karty.fioletowyOkno, karty.fioletowy1, karty.fioletowy2, karty.fioletowy3,
+                         karty.fioletowy4, karty.fioletowy5, karty.fioletowy6, karty.pomaranczowyOkno,
+                         karty.pomaranczowy1,
+                         karty.pomaranczowy2, karty.pomaranczowy3, karty.pomaranczowy4, karty.pomaranczowy5,
+                         karty.pomaranczowy6,
+                         karty.czerwonyOkno, karty.czerwony1, karty.czerwony2, karty.czerwony3, karty.czerwony4,
+                         karty.czerwony5,
+                         karty.czerwony6, karty.zielonyOkno, karty.zielony1, karty.zielony2, karty.zielony3,
+                         karty.zielony4,
+                         karty.czarnyOkno, karty.czarny1, karty.czarny2, karty.czarny3, karty.czarny4,
+                         karty.DomekNaDrzewie,
+                         karty.DomekDlaPtakow, karty.DomekDlaKota, karty.MaszynaDoLodow, karty.jacuzzi, karty.Wanna,
+                         karty.fortepian,
+                         karty.obrazy, karty.lozko, karty.regaly]
+
+    for x in taliaKartPomieszczen:
+        if x.id == kartaPomieszczen:
+            kartaPomieszczen = x
+
+    if kartaDodatkow == -1:
+        zmianaDruzyny(Druzyna,numer)
+    else:
+        for x in taliaKartDodatkow:
+            if x.id == kartaDodatkow:
+                kartaDodatkow = x
 
 
 
