@@ -212,7 +212,7 @@ PokojGier = karta_pomieszczen(9, {1: 2})
 PokojGier.miejsce = [1, 2]
 PokojGier.id = 42
 
-pralnia = karta_pomieszczen(10, {1: 1})
+pralnia = karta_pomieszczen(10, {1: 2})
 pralnia.miejsce = [3]
 pralnia.id = 43
 

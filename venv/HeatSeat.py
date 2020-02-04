@@ -114,6 +114,11 @@ def liczeniePunktow():
     licznikOkien = 0
     tenSamDach = False
     zOknem = False
+    okno = 0
+    lazienka = False
+    kuchnia = False
+    sypialnia = False
+    licznikpetli = 1
     for x in Druzyna:
         for y in x.domek:
             print('y %d' %y)
@@ -213,8 +218,7 @@ def liczeniePunktow():
                 kopiaDachu.append(w.nazwa)
             kopiaDachu = list(set(kopiaDachu)) #stworzenie listy z unikalnymi nazwami dachów
             for t in kopiaDachu:
-                print(t)
-                if zOknem:
+                if zOknem == True:
                     break
                 else:
                     lista = [p for p in x.dach if p.nazwa == t]
@@ -222,12 +226,16 @@ def liczeniePunktow():
                     lista.extend(listadwa)
                     if len(lista) >= 4: #czy są 4 takie same dachy
                         tenSamDach = True
-                        if t+1 in lista: #sprawdzenie, czy w takich samych dachach jest okno
-                            x.punkty = x.punkty + 9
-                            zOknem = True
-                            print('punkty za okno i dach w tym samym kolorze')
+                        for f in lista: #sprawdzenie, czy w takich samych dachach jest okno
+                            print('f', f)
+                            print('t+1', t+1)
+                            if f.nazwa == t+1:
+                                x.punkty = x.punkty + 9
+                                zOknem = True
+                                print('punkty za okno i dach w tym samym kolorze')
             if zOknem == False and tenSamDach == True:
                 x.punkty = x.punkty + 8
+                print('ten sam dach')
             elif zOknem == False and tenSamDach == False:
                 x.punkty = x.punkty + 3
                 print('punkty za rozny dach')
@@ -241,6 +249,47 @@ def liczeniePunktow():
             print('nie ma dachu')
             pass
         licznikOkien = 0
+        zOknem = False
+        tenSamDach = False
+        okno = 0
+
+        for k in x.domek[1]:
+            if 6 == k.nazwa: #przyznawanie punktów za funckjonalność domku, lazienki na kazdym piętrze
+                for j in x.domek[2]:
+                    if 6 == j.nazwa:
+                        x.punkty = x.punkty + 3
+                        print('za lazienki')
+
+        while licznikpetli <= 2: #czy jest lazienka w domku
+            for r in x.domek[licznikpetli]:
+                if 6 == r.nazwa:
+                    lazienka = True
+                    licznikpetli = licznikpetli + 1
+        licznikpetli = 1
+
+        while licznikpetli <= 2: #czy jest sypialnia w domku
+            for r in x.domek[licznikpetli]:
+                if 4 == r.nazwa:
+                    sypialnia = True
+                    licznikpetli = licznikpetli + 1
+        licznikpetli = 1
+
+        while licznikpetli <= 2: #czy jest kuchnia w domku
+            for r in x.domek[licznikpetli]:
+                if 5 == r.nazwa:
+                    kuchnia = True
+                    licznikpetli = licznikpetli + 1
+
+
+        if kuchnia == True and lazienka == True and sypialnia == True:
+            x.punkty = x.punkty + 3
+            print('za lazienke, kuchnie, sypialnie')
+
+        kuchnia = False
+        lazienka = False
+        sypialnia = False
+        licznikpetli = 1
+
 @app.route('/HeatSeat')
 def HeatSeat():
     '''Gra HeatSeat'''
