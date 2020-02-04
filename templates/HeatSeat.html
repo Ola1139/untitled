@@ -3,32 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Gra Domek</title>
+    <link href="/static/style/style9.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div id="domek">
-    <div>
+<div>
+    <div class="talia">
     {{ tura }}
+    {{ gracz.nazwa }}
  <table>
  <tr>
      {% for i in taliaDodatkow %}
-        <td><img src="../static/images/{{ i.nazwa }}.png" alt="karta">
+        {% if i == 'tlo' %}
+        <td><img src="/static/images/tlo.png" alt="karta" class="kartyTalii">
+        {% else %}
+        <td><img src="../static/images/{{ i.nazwa }}.png" alt="karta" class="kartyTalii">
         </td>
+        {% endif %}
      {% endfor %}
-     <td><img src="../static/images/znacznik.png" alt="karta"></td>
+     <td><img src="../static/images/znacznik.png" alt="karta" class="kartyTalii"></td>
 
  </tr>
  <tr>
 {% for t in taliaPomieszczen %}
-        <td><img src="../static/images/{{ t.nazwa }}.png" alt="karta">
+        {% if t == 'tlo' %}
+        <td><img src="../static/images/tlo.png" alt="karta" class="kartyTalii">
+        {% else %}
+        <td><img src="../static/images/{{ t.nazwa }}.png" alt="karta" class="kartyTalii">
         <br>
         {% if loop.index0 == 4 %}
-            <a href="HeatSeat/{{t.id}}/{{ -1 }}">Wybieram tę parę</a>
+            <a href="HeatSeat/{{t.id}}/{{ 123456 }}">Wybieram tę parę</a>
         {% else %}
             <a href="HeatSeat/{{ t.id }}/{{ taliaDodatkow[loop.index0].id }}">Wybieram tę parę</a>
         {% endif %}
         </td>
+        {% endif %}
 {% endfor %}
  </tr>
+ </table>
+    </div>
+<div class="domek">
+    <table>
+{% for t in domek %}
+    <tr>
+    {% for i in domek[t] %}
+        {% if i != '0' and i != 'dach' and i != 'tlo' %}
+        <td><img src="../static/images/{{ i.nazwa }}.png" alt="karta" class="domek"></td>
+        {% else %}
+        <td><img src="../static/images/{{ i }}.png" alt="karta" class="domek"></td>
+        {% endif %}
+    {% endfor %}
+    </tr>
+{% endfor %}
  </table>
     </div>
 

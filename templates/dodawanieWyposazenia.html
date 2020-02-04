@@ -7,6 +7,7 @@
 </head>
 <body>
 {{ x }}
+   <a href="/HeatSeat">Zrezygnuj z wyposazenia i kolejny gracz</a>
 <div class="domek">
  <table>
 {% for t in domek %}
@@ -14,16 +15,12 @@
     {% for i in domek[t] %}
          {% if i != '0' and i != 'dach' and i != 'tlo' %}
         <td><img src="/static/images/{{ i.nazwa }}.png" alt="karta" class="kartyDomku">
+            <br>
+           <a href="/polozenieWyposazenia/{{ t }}/{{ loop.index0 }}/{{ kartaDodatkow.id }}"> Poloz tutaj kartę </a>
         {% else %}
         <td><img src="/static/images/{{ i }}.png" alt="karta" class="kartyDomku">
         {% endif %}
-        {% if i == '0' %}
-            <br>
 
-           <a href="/polozenie/{{ t }}/{{ loop.index0 }}/{{ kartaPomieszczen.id }}/{{ kartaDodatkow.id }}"> Poloz tutaj kartę </a>
-        <br>
-            <a href="/polozenie/{{ t }}/{{ loop.index0 }}/{{ 58 }}/{{ kartaDodatkow.id }}"> Poloz tutaj kartę jako pusty pokój</a>
-        {% endif %}
         </td>
     {% endfor %}
     </tr>

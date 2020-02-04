@@ -27,6 +27,18 @@ def Zasady():
 def runda(kartaPomieszczen, kartaDodatkow):
     return HeatSeat.runda(kartaPomieszczen, kartaDodatkow)
 
+@app.route('/polozenie/<int:t>/<int:loopindex>/<int:kartaPomieszczen>/<int:kartaDodatkow>')
+def HeatSeatPolozenie(t, loopindex, kartaPomieszczen, kartaDodatkow):
+    return HeatSeat.polozenie(t, loopindex, kartaPomieszczen,kartaDodatkow)
+
+@app.route('/polozenieWyposazenia/<int:t>/<int:loopindex>/<int:kartaDodatkow>')
+def polozenieWyposazenia(t, loopindex, kartaDodatkow):\
+    return  HeatSeat.polozenieWyposazenia(t, loopindex, kartaDodatkow)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(host="0.0.0.0", port=5010, debug = True)
 
