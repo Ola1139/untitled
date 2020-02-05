@@ -14,6 +14,10 @@
     {% for i in domek[t] %}
          {% if i != '0' and i != 'dach' and i != 'tlo' %}
         <td><img src="/static/images/{{ i.nazwa }}.png" alt="karta" class="kartyDomku">
+            {% if i.wyposazenie != 0 %}
+            <br>
+            {{i.wyposazenie.tytul}}
+        {% endif %}
         {% else %}
         <td><img src="/static/images/{{ i }}.png" alt="karta" class="kartyDomku">
         {% endif %}
@@ -29,6 +33,16 @@
     </tr>
 {% endfor %}
  </table>
+
+    {% for x in gracz.ogrodek%}
+         Twój ogródek
+    {{x.tytul}}
+ {% endfor %}
+</div>
+<div>
+    Karta do położenia
+    <br>
+    <img src="/static/images/{{ kartaPomieszczen.nazwa }}.png" alt="karta" width="10%">
 </div>
 </body>
 </html>

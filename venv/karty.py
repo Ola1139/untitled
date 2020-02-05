@@ -5,7 +5,7 @@ class karta_pomieszczen():
     id = 0
     #punkty = {1: 0, 2: 0, 3: 0}  # klucze to odpowiednio ilość kart obok siebie
     miejsce = [0]  # na którym piętrze może być
-    wyposazenie = []
+    wyposazenie = 0
     sasiad = None
     zamkniecie = False
 
@@ -17,6 +17,7 @@ class karta_aneks():
     id = 0
     miejsce = [0]
     sasiad = 0
+    wyposazenie = 0
     zamkniecie = False
 
 
@@ -29,9 +30,9 @@ class karta_dachu():
 
 
 class karta_wyposazenia():
-    def __init__(self, nazwa):
+    def __init__(self, nazwa, tytul):
         self.nazwa = nazwa
-
+        self.tytul = tytul
     id = 0
     punkty = 0
     miejsce = [0]  # w ktorym pomieszczeniu moze byc
@@ -411,52 +412,52 @@ czarnyOkno = karta_dachu(601)
 czarnyOkno.okno = True
 czarnyOkno.id = 38
 
-DomekDlaKota = karta_wyposazenia(20)
+DomekDlaKota = karta_wyposazenia(20, 'Domek dla kota')
 DomekDlaKota.miejsce = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 DomekDlaKota.punkty = 1
 DomekDlaKota.id = 39
 
-DomekDlaPtakow = karta_wyposazenia(21)
+DomekDlaPtakow = karta_wyposazenia(21, 'Domek dla ptakow')
 DomekDlaPtakow.miejsce = [2121]
 DomekDlaPtakow.punkty = 1
 DomekDlaPtakow.id = 40
 
-DomekNaDrzewie = karta_wyposazenia(22)
+DomekNaDrzewie = karta_wyposazenia(22, 'Domek na drzewie')
 DomekNaDrzewie.miejsce = [2121]
 DomekNaDrzewie.punkty = 1
 DomekNaDrzewie.id = 41
 
-MaszynaDoLodow = karta_wyposazenia(23)
+MaszynaDoLodow = karta_wyposazenia(23, 'Maszyna do lodów')
 MaszynaDoLodow.miejsce = [5]
 MaszynaDoLodow.punkty = 2
 MaszynaDoLodow.id = 42
 
-jacuzzi = karta_wyposazenia(24)
+jacuzzi = karta_wyposazenia(24, 'Jacuzzi')
 jacuzzi.miejsce = [6]
 jacuzzi.punkty = 2
 jacuzzi.id = 43
 
-Wanna = karta_wyposazenia(25)
+Wanna = karta_wyposazenia(25, 'Wanna z hydromasazem')
 Wanna.miejsce = [6]
 Wanna.punkty = 2
 Wanna.id = 44
 
-fortepian = karta_wyposazenia(26)
+fortepian = karta_wyposazenia(26, 'Fortepian')
 fortepian.miejsce = [11]
 fortepian.punkty = 3
 fortepian.id = 45
 
-obrazy = karta_wyposazenia(27)
+obrazy = karta_wyposazenia(27, 'Obrazy')
 obrazy.miejsce = [11]
 obrazy.punkty = 2
 obrazy.id = 46
 
-lozko = karta_wyposazenia(28)
+lozko = karta_wyposazenia(28, 'Lóżko z baldachimem')
 lozko.miejsce = [4]
 lozko.punkty = 2
 lozko.id = 47
 
-regaly = karta_wyposazenia(29)
+regaly = karta_wyposazenia(29, 'Regały')
 regaly.miejsce = [3, 7, 10, 12, 13]
 regaly.punkty = 1
 regaly.id = 48

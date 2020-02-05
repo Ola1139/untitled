@@ -15,6 +15,10 @@
     {% for i in domek[t] %}
          {% if i != '0' and i != 'dach' and i != 'tlo' %}
         <td><img src="/static/images/{{ i.nazwa }}.png" alt="karta" class="kartyDomku">
+            {% if i.wyposazenie != 0 %}
+            <br>
+            {{i.wyposazenie.tytul}}
+        {% endif %}
             <br>
            <a href="/polozenieWyposazenia/{{ t }}/{{ loop.index0 }}/{{ kartaDodatkow.id }}"> Poloz tutaj kartę </a>
         {% else %}
@@ -26,6 +30,15 @@
     </tr>
 {% endfor %}
  </table>
+ Twój ogródek
+    {% for x in gracz.ogrodek%}
+         Twój ogródek
+    {{x.tytul}}
+ {% endfor %}
 </div>
+<br>
+ Karta do położenia
+    <br>
+    <img src="/static/images/{{ kartaDodatkow.nazwa }}.png" alt="karta" width="10%">
 </body>
 </html>

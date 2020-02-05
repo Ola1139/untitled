@@ -32,8 +32,28 @@ def HeatSeatPolozenie(t, loopindex, kartaPomieszczen, kartaDodatkow):
     return HeatSeat.polozenie(t, loopindex, kartaPomieszczen,kartaDodatkow)
 
 @app.route('/polozenieWyposazenia/<int:t>/<int:loopindex>/<int:kartaDodatkow>')
-def polozenieWyposazenia(t, loopindex, kartaDodatkow):\
+def polozenieWyposazenia(t, loopindex, kartaDodatkow):
     return  HeatSeat.polozenieWyposazenia(t, loopindex, kartaDodatkow)
+
+@app.route('/JedenGracz/<int:kartaPomieszczen>/<int:kartaDodatkow>')
+def runda1(kartaPomieszczen, kartaDodatkow):
+    return JedenGracz.runda1(kartaPomieszczen, kartaDodatkow)
+
+@app.route('/polozenie1/<int:t>/<int:loopindex>/<int:kartaPomieszczen>/<int:kartaDodatkow>')
+def JedenGraczPolozenie(t, loopindex, kartaPomieszczen, kartaDodatkow):
+    return JedenGracz.polozenie1(t, loopindex, kartaPomieszczen,kartaDodatkow)
+
+@app.route('/polozenieWyposazenia1/<int:t>/<int:loopindex>/<int:kartaDodatkow>')
+def polozenieWyposazenia1(t, loopindex, kartaDodatkow):
+    return  JedenGracz.polozenieWyposazenia1(t, loopindex, kartaDodatkow)
+
+@app.route('/nowaGra')
+def nowaGra():
+    return HeatSeat.nowaGra()
+
+@app.route('/newGame')
+def newGame():
+    return JedenGracz.newGame()
 
 @app.errorhandler(404)
 def page_not_found(e):
