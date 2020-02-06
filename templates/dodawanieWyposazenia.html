@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="/static/style/style9.css" rel="stylesheet" type="text/css">
+    <link href="/static/style/style15.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 {{ x }}
-   <a href="/HeatSeat">Zrezygnuj z wyposazenia i kolejny gracz</a>
+<a href="/HeatSeat"><div class="przycisk"> Zrezygnuj z wyposazenia i kolejny gracz</div></a>
 <div class="domek">
  <table>
 {% for t in domek %}
@@ -20,7 +20,7 @@
             {{i.wyposazenie.tytul}}
         {% endif %}
             <br>
-           <a href="/polozenieWyposazenia/{{ t }}/{{ loop.index0 }}/{{ kartaDodatkow.id }}"> Poloz tutaj kartę </a>
+            <a href="/polozenieWyposazenia/{{ t }}/{{ loop.index0 }}/{{ kartaDodatkow.id }}"><div class="przycisk"> Poloz tutaj kartę </div> </a>
         {% else %}
         <td><img src="/static/images/{{ i }}.png" alt="karta" class="kartyDomku">
         {% endif %}
@@ -30,14 +30,14 @@
     </tr>
 {% endfor %}
  </table>
- Twój ogródek
+    <h3>Twój ogródek</h3>
     {% for x in gracz.ogrodek%}
          Twój ogródek
     {{x.tytul}}
  {% endfor %}
 </div>
 <br>
- Karta do położenia
+<h2> Karta do położenia</h2>
     <br>
     <img src="/static/images/{{ kartaDodatkow.nazwa }}.png" alt="karta" width="10%">
 </body>

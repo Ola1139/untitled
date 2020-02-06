@@ -13,6 +13,7 @@ class Gracze():
     domek = 0
     dach = 0
     ogrodek = []
+    prawdziwy = True
 
 #pelna talia kart pomieszczen na poczatek gry
 taliaKartPomieszczen = [karty.gabinet, karty.PokojGier, karty.biblioteka, karty.PokojDzieciecy1, karty.PokojDzieciecy2,
@@ -58,7 +59,7 @@ ruch = False
 pierwszyraz = True
 pierwszywRundzie = True
 
-def zachowanie():
+def zachowanie(gracz):
     '''1. Wybierz kartę z talii.
         2. Wybierz miejsce w domku
         3. Jeśli jest wyposażenie to wybierz pomieszczenie
@@ -71,39 +72,140 @@ def zachowanie():
     global licznikGracza
     global tura
     global zmiana
+    global ruch
+    global tura
+    global wyniki
+    global pierwszyraz
+    global pierwszywRundzie
+
     indeks = 0
     TwojaKartaPomieszczen = 0
     TwojaKartaDodatkow = 0
     ind = 0
+    indeks = 0
     polozeniePomieszczenia = False
+    znaleziona = False
+    znalezionyDodatek = False
+    dodanieWyposazenia = False
+
     for x in biezacaTaliaPomieszczen:
+        if znaleziona:
+            break
         if x != 'tlo':
             TwojaKartaPomieszczen = x
             ind = biezacaTaliaPomieszczen.index(x)
-    TwojaKartaDodatkow = biezacaTaliaDodatkow[ind]
+            znaleziona = True
+    # TwojaKartaDodatkow = biezacaTaliaDodatkow[ind-1]
 
     # usuwanie wybranej karty z biezacej talii
     for x in biezacaTaliaPomieszczen:
         if x == TwojaKartaPomieszczen:
-            indeks = biezacaTaliaPomieszczen.index(kartaPomieszczen)
+            indeks = biezacaTaliaPomieszczen.index(TwojaKartaPomieszczen)
             biezacaTaliaPomieszczen[indeks] = 'tlo'
+            # TwojaKartaDodatkow = biezacaTaliaDodatkow[indeks-1]
 
     if TwojaKartaDodatkow == 123456:
         TwojaKartaDodatkow = karty.karta_pierwszego_gracza
 
     for x in biezacaTaliaDodatkow:
-        if x == kartaDodatkow:
-            indeks = biezacaTaliaDodatkow.index(kartaDodatkow)
+        if znalezionyDodatek:
+            break
+        if x != 'tlo':
+            TwojaKartaDodatkow = x
+            ind = biezacaTaliaDodatkow.index(x)
+            znalezionyDodatek = True
+
+    for x in biezacaTaliaDodatkow:
+        if x == TwojaKartaDodatkow:
+            indeks = biezacaTaliaDodatkow.index(TwojaKartaDodatkow)
             biezacaTaliaDodatkow[indeks] = 'tlo'
 
+    licznikPietra = 1
     #polozeniekarty
     if 3 in TwojaKartaPomieszczen.miejsce:
         for x in gracz.domek[3]:
             if polozeniePomieszczenia:
                 break
-            if x == '0':
-                x = TwojaKartaPomieszczen
-                polozeniePomieszczenia = True
+            elif x != 'tlo':
+                if x != 'dach':
+                    if x == '0':
+                        ing = gracz.domek[3].index(x)
+                        gracz.domek[3][ing] = TwojaKartaPomieszczen
+                        polozeniePomieszczenia = True
+        if polozeniePomieszczenia == False:
+            for x in gracz.domek[2]:
+                if polozeniePomieszczenia:
+                    break
+                elif x == '0':
+                    ing = gracz.domek[2].index(x)
+                    gracz.domek[2][ing] = karty.PustyPokoj
+                    polozeniePomieszczenia = True
+        if polozeniePomieszczenia == False:
+            for x in gracz.domek[1]:
+                if polozeniePomieszczenia:
+                    break
+                elif x == '0':
+                    ing = gracz.domek[1].index(x)
+                    gracz.domek[1][ing] = karty.PustyPokoj
+                    polozeniePomieszczenia = True
+    else:
+        while licznikPietra<=2:
+            if polozeniePomieszczenia:
+                break
+            else:
+                for x in gracz.domek[licznikPietra]:
+                    if polozeniePomieszczenia:
+                        break
+                    else:
+                        if x =='0':
+                            if gracz.domek[licznikPietra+1] != '0':
+                                ing = gracz.domek[licznikPietra].index(x)
+                                gracz.domek[licznikPietra][ing] = TwojaKartaPomieszczen
+                                polozeniePomieszczenia = True
+                                licznikPietra = licznikPietra + 1
+                licznikPietra = licznikPietra + 1
+        if polozeniePomieszczenia:
+            pass
+        else:
+            for x in gracz.domek:
+                for y in gracz.domek[x]:
+                    if y == '0':
+                        if x != 3:
+                            if gracz.domek[x + 1] != '0':
+                                ing = gracz.domek[x].index(y)
+                                gracz.domek[x][ing] = karty.PustyPokoj
+                                polozeniePomieszczenia = True
+                        elif x == 3:
+                            ing = gracz.domek[x].index(y)
+                            gracz.domek[x][ing] = karty.PustyPokoj
+                            polozeniePomieszczenia = True
+
+    if TwojaKartaDodatkow == 123456:
+        zmiana[0] = True
+        zmiana[1] = licznikGracza
+    elif TwojaKartaDodatkow.nazwa >= 100 and TwojaKartaDodatkow.nazwa <= 601:
+        gracz.dach.append(TwojaKartaDodatkow)
+    elif TwojaKartaDodatkow.miejsce[0] == 2121:
+        gracz.ogrodek.append(TwojaKartaDodatkow)
+    elif TwojaKartaDodatkow.miejsce[0] != 2121:
+        for x in gracz.domek:
+            for y in gracz.domek[x]:
+                if dodanieWyposazenia:
+                    break
+                else:
+                    if y != 'tlo':
+                        if y != 'dach':
+                            if y != '0':
+                                if y.nazwa in TwojaKartaDodatkow.miejsce:
+                                    if y.wyposazenie == 0:
+                                        y.wyposazenie = TwojaKartaDodatkow
+                                        y.zamkniecie = True
+                                        dodanieWyposazenia = True
+    if licznikGracza % 4 == 3:
+        if tura >= 4:
+            pierwszywRundzie = True
+    ruch = True
+
 
 
 
@@ -184,36 +286,27 @@ def liczeniePunktow():
     dwieLazienki = False
     for x in Druzyna:
         for y in x.domek:
-            print('y %d' %y)
             if y == 3: #liczenie punktów w piwnicy
                 if 2 in x.domek[y][3].punkty: #jesli pomieszczenie jest 2 pokojowe
                     if x.domek[y][3].nazwa == x.domek[y][4].nazwa: #sprawdzenie, czy obok jest takie samo pomieszczenie
                         x.punkty = x.punkty + x.domek[y][3].punkty[2] #jeśli tak, to gracz otrzymuje punkty za 2 pokoje
                         if x.domek[y][3].wyposazenie != 0:
                             x.punkty = x.punkty + x.domek[y][3].wyposazenie.punkty
-                            print('punkt za wyposazenie')
-                        print('punkty', x.punkty, 'licznik', licznik)
                     else:
                         x.punkty = x.punkty + x.domek[y][3].punkty[1] + x.domek[y][4].punkty[1] #jesli obok siebie są różne pomieszczenie, to dostaje punkty za jednopokojowe pomieszczenia
                         if x.domek[y][3].wyposazenie != 0:
                             x.punkty = x.punkty + x.domek[y][3].wyposazenie.punkty
-                            print('punkt za wyposazenie')
                         if x.domek[y][4].wyposazenie != 0:
                             x.punkty = x.punkty + x.domek[y][4].wyposazenie.punkty
-                            print('punkt za wyposazenie')
-                        print('punkty', x.punkty, 'licznik', licznik)
                 else:
                     x.punkty = x.punkty + x.domek[y][3].punkty[1] + x.domek[y][4].punkty[1] #jesli pomieszczenie jest jednopokojowe to dostaje punkty za dwa jednopokojowe pomieszczenia
-                    print('punkty', x.punkty, 'licznik', licznik)
                     if x.domek[y][3].wyposazenie != 0:
                         x.punkty = x.punkty + x.domek[y][3].wyposazenie.punkty
-                        print('punkt za wyposazenie')
                     if x.domek[y][4].wyposazenie != 0:
                         x.punkty = x.punkty + x.domek[y][4].wyposazenie.punkty
-                        print('punkt za wyposazenie')
-                print('liczenie piwnicy')
             else: #jesli piętro nie jest piwnicą
                 while licznik <= 4: #przechodzenie po każdym pokoju (jest 5 na kazdym pietrze)
+                    print(x.domek[y][licznik])
                     if 3 in x.domek[y][licznik].punkty: #jesli pomieszczenie moze być 3pokojowe
                         if licznik != 4: #jesli pokoj nie jest ostatni na pietrze
                             if x.domek[y][licznik+1].nazwa == x.domek[y][licznik].nazwa: # jeśli kolejny pokoj to to samo pomieszczenie
@@ -221,72 +314,56 @@ def liczeniePunktow():
                                     if x.domek[y][licznik+2].nazwa == x.domek[y][licznik].nazwa: #jesli 3 karty pod rząd to to samo pomieszczenie
                                         x.punkty = x.punkty + x.domek[y][licznik].punkty[3]
                                         licznik = licznik + 3
-                                        print('punkty', x.punkty, 'licznik', licznik)
                                     else: #jesli tylko trzeci pokoj jest inny niz poprzednie dwa
                                         x.punkty = x.punkty + x.domek[y][licznik].punkty[2]
                                         licznik = licznik + 2
-                                        print('punkty', x.punkty, 'licznik', licznik)
                                 else: #jesli jest przedostatni
                                     x.punkty = x.punkty + x.domek[y][licznik].punkty[2]
                                     licznik = licznik + 2
-                                    print('punkty', x.punkty, 'licznik', licznik)
                             else: #jesli nie jest ostatni,ale kolejny pokoj to nie to samo pomieszczenie
                                 x.punkty = x.punkty + x.domek[y][licznik].punkty[1]
                                 licznik = licznik + 1
-                                print('punkty', x.punkty, 'licznik', licznik)
                         else: #jesli pokoj jest na ostatni na piętrze
                             x.punkty = x.punkty + x.domek[y][licznik].punkty[1]
                             licznik = licznik + 1
-                            print('punkty', x.punkty, 'licznik', licznik)
                     elif 2 in x.domek[y][licznik].punkty: #jesli pomieszczenie moze byc dwupokojowe
                         if x.domek[y][licznik].sasiad != None: #sprawdzenie, czy to aneks
                             if licznik != 4: #sprawdzenie, czy jest to ostatni pokoj
                                 if x.domek[y][licznik].sasiad == x.domek[y][licznik+1].nazwa: #jesli to nie jest ostatni pokoj to sprawdzenie, czy kolejne pomieszczenie to dobry sasiad dla aneksu
                                     x.punkty = x.punkty + x.domek[y][licznik].punkty[2]
                                     licznik = licznik + 1
-                                    print('punkty', x.punkty, 'licznik', licznik)
                                 else: #jesli koeljny pokoj to niedobry sasiad dla aneksu
                                     if licznik != 0: #sprawdzenie, czy nie jest to pierwszy pokoj
                                         if x.domek[y][licznik].sasiad == x.domek[y][licznik-1].nazwa: #sprawdzenie, czy poprzedni pokoj to dobry sasiad
                                             x.punkty = x.punkty + x.domek[y][licznik].punkty[2]
                                             licznik = licznik + 1
-                                            print('punkty', x.punkty, 'licznik', licznik)
                                         else: #jesli aneks nie ma zadnego dobrego sasiada
                                             x.punkty = x.punkty + x.domek[y][licznik].punkty[1]
                                             licznik = licznik + 1
-                                            print('punkty', x.punkty, 'licznik', licznik)
                                     else: #jesli jest to pierwszy pokoj, to aneks ma tylko jednego sasiada, ktorego juz sprawdzilismy
                                         x.punkty = x.domek[y][licznik].punkty[1]
                                         licznik = licznik + 1
-                                        print('punkty', x.punkty, 'licznik', licznik)
                             else:
                                 if x.domek[y][licznik].sasiad == x.domek[y][licznik - 1].nazwa:  # sprawdzenie, czy poprzedni pokoj to dobry sasiad
                                     x.punkty = x.punkty + x.domek[y][licznik].punkty[2]
                                     licznik = licznik + 1
-                                    print('punkty', x.punkty, 'licznik', licznik)
                                 else:  # jesli aneks nie ma zadnego dobrego sasiada
                                     x.punkty = x.punkty + x.domek[y][licznik].punkty[1]
                                     licznik = licznik + 1
-                                    print('punkty', x.punkty, 'licznik', licznik)
                         else: #jesli to nie aneks
                             if licznik != 4: #jesli nie jest to ostatni pokoj
                                 if x.domek[y][licznik + 1].nazwa == x.domek[y][licznik].nazwa: #sprawdzenie, czy kolejny pokoj to to samo pomieszczenie
                                     x.punkty = x.punkty + x.domek[y][licznik].punkty[2]
                                     licznik = licznik + 2
-                                    print('punkty', x.punkty, 'licznik', licznik)
                                 else: #jesli kolejny pokoj to inne pomieszczenie
                                     x.punkty = x.punkty + x.domek[y][licznik].punkty[1]
                                     licznik = licznik + 1
-                                    print('punkty', x.punkty, 'licznik', licznik)
                             else: #jesli jest to ostatnie pomieszczenie
                                 x.punkty = x.punkty + x.domek[y][licznik].punkty[1]
                                 licznik = licznik + 1
-                                print('punkty', x.punkty, 'licznik', licznik)
                     else: #jesli pomieszczenie jest jednopokojowe
                         x.punkty = x.punkty + x.domek[y][licznik].punkty[1]
                         licznik = licznik + 1
-                        print('punkty', x.punkty, 'licznik', licznik)
-            print('liczneie pietra')
             licznik = 0 #wyzerowanie licznika pokoju
 
         #liczenie punktów za dach
@@ -308,21 +385,16 @@ def liczeniePunktow():
                             if f.nazwa == t+1:
                                 x.punkty = x.punkty + 9
                                 zOknem = True
-                                print('punkty za okno i dach w tym samym kolorze')
             if zOknem == False and tenSamDach == True:
                 x.punkty = x.punkty + 8
-                print('ten sam dach')
             elif zOknem == False and tenSamDach == False:
                 x.punkty = x.punkty + 3
-                print('punkty za rozny dach')
                 for d in x.dach:
                     if licznikOkien <= 4:
                         if d.okno:
                             x.punkty = x.punkty + 1
                             licznikOkien = licznikOkien + 1
-                            print('punkty za okno')
         else: #nie ma wystarczającej ilości kart dachu
-            print('nie ma dachu')
             pass
         licznikOkien = 0
         zOknem = False
@@ -334,21 +406,17 @@ def liczeniePunktow():
                 for j in x.domek[2]:
                     if 6 == j.nazwa:
                         dwieLazienki = True
-                        print('za lazienki')
 
         if dwieLazienki:
             x.punkty = x.punkty + 3
-            print('dwie lazienki sa')
         dwieLazienki = False
 
         if lazienka:
             pass
         else:
             while licznikpetli <= 4:
-                print(x.domek[1][licznikpetli].nazwa)
                 if x.domek[1][licznikpetli].nazwa == 6:
                     lazienka = True
-                    print('jest lazienka na 1 pietrze')
                 licznikpetli = licznikpetli + 1
         licznikpetli = 0
 
@@ -356,10 +424,8 @@ def liczeniePunktow():
             pass
         else:
             while licznikpetli <= 4:
-                print(x.domek[2][licznikpetli].nazwa)
                 if x.domek[2][licznikpetli].nazwa == 6:
                     lazienka = True
-                    print('jest lazienka na 2 pietrze')
                 licznikpetli = licznikpetli + 1
         licznikpetli = 0
 
@@ -367,10 +433,8 @@ def liczeniePunktow():
             pass
         else:
             while licznikpetli <= 4:
-                print(x.domek[1][licznikpetli].nazwa)
                 if x.domek[1][licznikpetli].nazwa == 4:
                     sypialnia = True
-                    print('jest sypialnia na 1 pietrze')
                 licznikpetli = licznikpetli + 1
         licznikpetli = 0
 
@@ -378,10 +442,8 @@ def liczeniePunktow():
             pass
         else:
             while licznikpetli <= 4:
-                print(x.domek[2][licznikpetli].nazwa)
                 if x.domek[2][licznikpetli].nazwa == 4:
                     sypialnia = True
-                    print('jest sypialnia na 2 pietrze')
                 licznikpetli = licznikpetli + 1
         licznikpetli = 0
 
@@ -389,10 +451,8 @@ def liczeniePunktow():
             pass
         else:
            while licznikpetli <= 4:
-                print(x.domek[2][licznikpetli].nazwa)
                 if x.domek[1][licznikpetli].nazwa == 5:
                     kuchnia = True
-                    print('jest kuchnia na 1 pietrze')
                 licznikpetli = licznikpetli + 1
         licznikpetli = 0
 
@@ -400,10 +460,8 @@ def liczeniePunktow():
             pass
         else:
             while licznikpetli <= 4:
-                print(x.domek[2][licznikpetli].nazwa)
                 if x.domek[2][licznikpetli].nazwa == 5:
                     kuchnia = True
-                    print('jest kuchnia na 2 pietrze')
                 licznikpetli = licznikpetli + 1
         licznikpetli = 0
 
@@ -411,7 +469,6 @@ def liczeniePunktow():
             if lazienka:
                 if sypialnia:
                     x.punkty = x.punkty + 3
-                    print('za lazienke, kuchnie, sypialnie')
 
         kuchnia = False
         lazienka = False
@@ -420,23 +477,34 @@ def liczeniePunktow():
 
         for m in x.ogrodek:
             x.punkty = x.punkty + m.punkty
-            print('punkt za', m.tytul)
 
         while licznikpetli <= 4:
-            print(x.domek[1][licznikpetli].nazwa)
             if x.domek[1][licznikpetli].wyposazenie != 0:
                 x.punkty = x.punkty + x.domek[1][licznikpetli].wyposazenie.punkty
-                print('wyposazenie na 2 pietrze')
             licznikpetli = licznikpetli + 1
         licznikpetli = 0
 
         while licznikpetli <= 4:
-            print(x.domek[2][licznikpetli].nazwa)
             if x.domek[2][licznikpetli].wyposazenie != 0:
                 x.punkty = x.punkty + x.domek[2][licznikpetli].wyposazenie.punkty
 
             licznikpetli = licznikpetli + 1
         licznikpetli = 0
+
+@app.route('/JedenGraczWybor/<int:liczbaKomputerow>')
+def JedenGraczWybor(liczbaKomputerow):
+    global Druzyna
+    if liczbaKomputerow == 1:
+        Druzyna[3].prawdziwy = False
+    elif liczbaKomputerow == 2:
+        Druzyna[3].prawdziwy = False
+        Druzyna[2].prawdziwy = False
+    elif liczbaKomputerow == 3:
+        Druzyna[3].prawdziwy = False
+        Druzyna[2].prawdziwy = False
+        Druzyna[1].prawdziwy = False
+
+    return redirect('/JedenGracz')
 
 @app.route('/JedenGracz')
 def JedenGracz():
@@ -455,7 +523,6 @@ def JedenGracz():
     global ruch
     global pierwszyraz
     global pierwszywRundzie
-
 
     if ruch:
         tura = tura + 1
@@ -480,22 +547,22 @@ def JedenGracz():
         wyniki.extend([gracz1, gracz2, gracz3, gracz4])
         wyniki.sort(key = lambda x: x.punkty, reverse=True)
         if wyniki[0].punkty != wyniki[1].punkty:
-            return render_template('spraw.html', Druzyna=Druzyna, zwyciezca = [wyniki[0]])
+            return render_template('sprawJG.html', Druzyna=Druzyna, zwyciezca = [wyniki[0]])
         elif wyniki[0].punkty != wyniki[2].punkty:
-            return render_template('spraw.html', Druzyna= Druzyna, zwyciezca = [wyniki[0], wyniki[1]])
+            return render_template('sprawJG.html', Druzyna= Druzyna, zwyciezca = [wyniki[0], wyniki[1]])
         elif wyniki[0].punkty != wyniki[3].punkty:
-            return render_template('spraw.html', Druzyna= Druzyna, zwyciezca = [wyniki[0], wyniki[1], wyniki[2]])
+            return render_template('sprawJG.html', Druzyna= Druzyna, zwyciezca = [wyniki[0], wyniki[1], wyniki[2]])
         else:
-            return render_template('spraw.html', Druzyna= Druzyna, zwyciezca = wyniki)
+            return render_template('sprawJG.html', Druzyna= Druzyna, zwyciezca = wyniki)
     elif tura > 49:
         if wyniki[0] != wyniki[1]:
-            return render_template('spraw.html', Druzyna=Druzyna, zwyciezca=[wyniki[0]])
+            return render_template('sprawJG.html', Druzyna=Druzyna, zwyciezca=[wyniki[0]])
         elif wyniki[0] != wyniki[2]:
-            return render_template('spraw.html', Druzyna=Druzyna, zwyciezca=[wyniki[0], wyniki[1]])
+            return render_template('sprawJG.html', Druzyna=Druzyna, zwyciezca=[wyniki[0], wyniki[1]])
         elif wyniki[0] != wyniki[3]:
-            return render_template('spraw.html', Druzyna=Druzyna, zwyciezca=[wyniki[0], wyniki[1], wyniki[2]])
+            return render_template('sprawJG.html', Druzyna=Druzyna, zwyciezca=[wyniki[0], wyniki[1], wyniki[2]])
         else:
-            return render_template('spraw.html', Druzyna=Druzyna, zwyciezca=wyniki)
+            return render_template('sprawJG.html', Druzyna=Druzyna, zwyciezca=wyniki)
 
     if tura%4 == 1:
         if pierwszywRundzie:
@@ -518,13 +585,15 @@ def JedenGracz():
             del taliaKartPomieszczen[:5]
             del taliaKartDodatkow[:4]
             pierwszywRundzie = False
-    # print(licznikGracza)
 
 
     domek = Druzyna[licznikGracza].domek
-
-    return render_template('HeatSeat.html', taliaPomieszczen=biezacaTaliaPomieszczen, taliaDodatkow=biezacaTaliaDodatkow, tura=tura,
+    if Druzyna[licznikGracza].prawdziwy:
+        return render_template('JedenGracz.html', taliaPomieszczen=biezacaTaliaPomieszczen, taliaDodatkow=biezacaTaliaDodatkow, tura=tura,
                            gracz = Druzyna[licznikGracza], domek = domek)
+    else:
+        zachowanie(Druzyna[licznikGracza])
+        return redirect('/JedenGracz')
 
 @app.route('/JedenGracz/<int:kartaPomieszczen>/<int:kartaDodatkow>')
 def runda1(kartaPomieszczen, kartaDodatkow):
@@ -563,11 +632,11 @@ def runda1(kartaPomieszczen, kartaDodatkow):
                 biezacaTaliaDodatkow[indeks] = 'tlo'
 
 
-    return render_template('runda.html', kartaPomieszczen=kartaPomieszczen, kartaDodatkow = kartaDodatkow, gracz = Druzyna[licznikGracza],
+    return render_template('rundaJG.html', kartaPomieszczen=kartaPomieszczen, kartaDodatkow = kartaDodatkow, gracz = Druzyna[licznikGracza],
                            domek = domek, tura = tura)
 
-@app.route('/polozenie1/<int:t>/<int:loopindex>/<int:kartaPomieszczen>/<int:kartaDodatkow>')
-def polozenie1(t, loopindex, kartaPomieszczen, kartaDodatkow):
+@app.route('/polozenieJG/<int:t>/<int:loopindex>/<int:kartaPomieszczen>/<int:kartaDodatkow>')
+def polozenieJG(t, loopindex, kartaPomieszczen, kartaDodatkow):
     global Druzyna
     global TaliaDodatkowOdrzuconych
     global TaliaPomieszczenOdrzuconych
@@ -619,7 +688,7 @@ def polozenie1(t, loopindex, kartaPomieszczen, kartaDodatkow):
                         if tura >= 4:
                             pierwszywRundzie = True
                     ruch = True
-                    return render_template('dodawanieWyposazenia.html', kartaPomieszczen=kartaPomieszczen, kartaDodatkow = kartaDodatkow,
+                    return render_template('dodawanieWyposazeniaJG.html', kartaPomieszczen=kartaPomieszczen, kartaDodatkow = kartaDodatkow,
                                            gracz = Druzyna[licznikGracza],
                                    domek = domek, tura = tura )
 
@@ -628,24 +697,24 @@ def polozenie1(t, loopindex, kartaPomieszczen, kartaDodatkow):
                         pierwszywRundzie = True
                 ruch = True
                 gracz = Druzyna[licznikGracza]
-                return render_template('runda1.html', domek = domek, gracz = gracz)
+                return render_template('runda1JG.html', domek = domek, gracz = gracz)
             else:
-                return render_template('runda.html', x='Położyłeś pomieszczenia na złym piętrze',
+                return render_template('rundaJG.html', x='Położyłeś pomieszczenia na złym piętrze',
                                        kartaPomieszczen=kartaPomieszczen, kartaDodatkow=kartaDodatkow,
                                        gracz=Druzyna[licznikGracza],
                                        domek=domek, tura=tura)
         else:
-            return render_template('runda.html', x = 'Nie możesz położyć pomieszczenia nad pustym pomieszczeniem',
+            return render_template('rundaJG.html', x = 'Nie możesz położyć pomieszczenia nad pustym pomieszczeniem',
                                    kartaPomieszczen=kartaPomieszczen, kartaDodatkow = kartaDodatkow, gracz = Druzyna[licznikGracza],
                                    domek = domek, tura = tura)
     else:
-        return render_template('runda.html', x='To było niegodne zagranie!',
+        return render_template('rundaJG.html', x='To było niegodne zagranie!',
                                kartaPomieszczen=kartaPomieszczen, kartaDodatkow=kartaDodatkow,
                                gracz=Druzyna[licznikGracza],
                                domek=domek, tura=tura)
 
-@app.route('/polozenieWyposazenia1/<int:t>/<int:loopindex>/<int:kartaDodatkow>')
-def polozenieWyposazenia1(t, loopindex, kartaDodatkow):
+@app.route('/polozenieWyposazeniaJG/<int:t>/<int:loopindex>/<int:kartaDodatkow>')
+def polozenieWyposazeniaJG(t, loopindex, kartaDodatkow):
     global Druzyna
     global TaliaDodatkowOdrzuconych
     global TaliaPomieszczenOdrzuconych
@@ -667,11 +736,11 @@ def polozenieWyposazenia1(t, loopindex, kartaDodatkow):
             domek[t][loopindex].wyposazenie = kartaDodatkow
             domek[t][loopindex].zamkniecie = True
         else:
-            return render_template('dodawanieWyposazenia.html', kartaDodatkow=kartaDodatkow,
+            return render_template('dodawanieWyposazeniaJG.html', kartaDodatkow=kartaDodatkow,
                                    gracz=Druzyna[licznikGracza],
                                    domek=domek, tura=tura, x='Nie mozesz polozyc tutaj wyposazenia')
     else:
-        return render_template('dodawanieWyposazenia.html', kartaDodatkow = kartaDodatkow,
+        return render_template('dodawanieWyposazeniaJG.html', kartaDodatkow = kartaDodatkow,
                                        gracz = Druzyna[licznikGracza],
                                domek = domek, tura = tura, x = 'Nie mozesz polozyc tutaj wyposazenia' )
     ruch = True
@@ -679,7 +748,7 @@ def polozenieWyposazenia1(t, loopindex, kartaDodatkow):
         if tura >= 4:
             pierwszywRundzie = True
     gracz = Druzyna[licznikGracza]
-    return render_template('runda1.html', domek = domek, gracz = gracz)
+    return render_template('runda1JG.html', domek = domek, gracz = gracz)
 
 @app.route('/newGame')
 def newGame():
@@ -751,6 +820,7 @@ def newGame():
     for x in taliaKartPomieszczen:
         x.wyposazenie = 0
         x.zamkniecie = False
+
     # domki poszczegolnych graczy
     Domek1 = {1: ['0', '0', '0', '0', '0'], 2: ['0', '0', '0', '0', '0'], 3: ['tlo', 'dach', 'tlo', '0', '0']}
     Domek2 = {1: ['0', '0', '0', '0', '0'], 2: ['0', '0', '0', '0', '0'], 3: ['tlo', 'dach', 'tlo', '0', '0']}
@@ -771,24 +841,31 @@ def newGame():
     gracz1.domek = Domek1
     gracz1.ogrodek = Ogrod1
 
+
     gracz2 = Gracze('gracz2')
     gracz2.dach = Dach2
     gracz2.domek = Domek2
     gracz2.ogrodek = Ogrod2
+
 
     gracz3 = Gracze('gracz3')
     gracz3.dach = Dach3
     gracz3.domek = Domek3
     gracz3.ogrodek = Ogrod3
 
+
     gracz4 = Gracze('gracz4')
     gracz4.dach = Dach4
     gracz4.domek = Domek4
     gracz4.ogrodek = Ogrod4
 
+
     # tworzenie druzyny
     Druzyna = [gracz1, gracz2, gracz3, gracz4]
 
+    for x in Druzyna:
+        x.prawdziwy = True
+        x.punkty = 0
 
-    return redirect('/JedenGracz')
+    return redirect('/ileGraczy')
 

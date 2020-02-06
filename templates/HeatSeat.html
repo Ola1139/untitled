@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Gra Domek</title>
-    <link href="/static/style/style9.css" rel="stylesheet" type="text/css">
+    <link href="/static/style/style15.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div>
     <div class="talia">
-    {{ tura }}
-    {{ gracz.nazwa }}
+        <h2>{{ tura }}</h2>
+        <h1> {{ gracz.nazwa }}</h1>
  <table>
  <tr>
      {% for i in taliaDodatkow %}
@@ -31,9 +31,9 @@
         <td><img src="../static/images/{{ t.nazwa }}.png" alt="karta" class="kartyTalii">
         <br>
         {% if loop.index0 == 4 %}
-            <a href="HeatSeat/{{t.id}}/{{ 123456 }}">Wybieram tę parę</a>
+            <a href="HeatSeat/{{t.id}}/{{ 123456 }}"> <div class="przycisk"> Wybieram tę parę</div></a>
         {% else %}
-            <a href="HeatSeat/{{ t.id }}/{{ taliaDodatkow[loop.index0].id }}">Wybieram tę parę</a>
+            <a href="HeatSeat/{{ t.id }}/{{ taliaDodatkow[loop.index0].id }}"><div class="przycisk">Wybieram tę parę</div></a>
         {% endif %}
         </td>
         {% endif %}
@@ -62,7 +62,7 @@
  </table>
 
     {% for x in gracz.ogrodek%}
-         Twój ogródek
+        <h3>Twój ogródek</h3>
     {{x.tytul}}
  {% endfor %}
     </div>

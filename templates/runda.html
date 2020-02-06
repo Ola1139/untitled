@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="/static/style/style9.css" rel="stylesheet" type="text/css">
+    <link href="/static/style/style15.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-{{ x }}
+<div class="przycisk">{{ x }}</div>
 <div class="domek">
  <table>
 {% for t in domek %}
@@ -24,23 +24,24 @@
         {% if i == '0' %}
             <br>
 
-           <a href="/polozenie/{{ t }}/{{ loop.index0 }}/{{ kartaPomieszczen.id }}/{{ kartaDodatkow.id }}"> Poloz tutaj kartę </a>
+            <a href="/polozenie/{{ t }}/{{ loop.index0 }}/{{ kartaPomieszczen.id }}/{{ kartaDodatkow.id }}"> <div class="przycisk">Poloz tutaj kartę</div> </a>
         <br>
-            <a href="/polozenie/{{ t }}/{{ loop.index0 }}/{{ 58 }}/{{ kartaDodatkow.id }}"> Poloz tutaj kartę jako pusty pokój</a>
+            <a href="/polozenie/{{ t }}/{{ loop.index0 }}/{{ 58 }}/{{ kartaDodatkow.id }}"> <div class="przycisk"> Poloz tutaj kartę jako pusty pokój</div></a>
         {% endif %}
         </td>
     {% endfor %}
     </tr>
 {% endfor %}
  </table>
-
+    <div class="ogrodek">
     {% for x in gracz.ogrodek%}
-         Twój ogródek
+        <h3>Twój ogródek</h3>
     {{x.tytul}}
  {% endfor %}
+    </div>
 </div>
 <div>
-    Karta do położenia
+    <h2> Karta do położenia </h2>
     <br>
     <img src="/static/images/{{ kartaPomieszczen.nazwa }}.png" alt="karta" width="10%">
 </div>

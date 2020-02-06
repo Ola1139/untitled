@@ -7,6 +7,10 @@ app = Flask(__name__)
 def main():
     return render_template('index.html')
 
+@app.route('/JedenGracz/<int:liczbaKomputerow>')
+def JGWybor(liczbaKomputerow):
+    return JedenGracz.JedenGraczWybor(liczbaKomputerow)
+
 @app.route('/JedenGracz')
 def JG():
     return JedenGracz.JedenGracz()
@@ -23,6 +27,10 @@ def MP():
 def Zasady():
     return render_template('zasady.html')
 
+@app.route('/ileGraczy')
+def ileGraczy():
+    return render_template('ileGraczy.html')
+
 @app.route('/HeatSeat/<int:kartaPomieszczen>/<int:kartaDodatkow>')
 def runda(kartaPomieszczen, kartaDodatkow):
     return HeatSeat.runda(kartaPomieszczen, kartaDodatkow)
@@ -36,16 +44,16 @@ def polozenieWyposazenia(t, loopindex, kartaDodatkow):
     return  HeatSeat.polozenieWyposazenia(t, loopindex, kartaDodatkow)
 
 @app.route('/JedenGracz/<int:kartaPomieszczen>/<int:kartaDodatkow>')
-def runda1(kartaPomieszczen, kartaDodatkow):
+def rundaJG(kartaPomieszczen, kartaDodatkow):
     return JedenGracz.runda1(kartaPomieszczen, kartaDodatkow)
 
-@app.route('/polozenie1/<int:t>/<int:loopindex>/<int:kartaPomieszczen>/<int:kartaDodatkow>')
-def JedenGraczPolozenie(t, loopindex, kartaPomieszczen, kartaDodatkow):
-    return JedenGracz.polozenie1(t, loopindex, kartaPomieszczen,kartaDodatkow)
+@app.route('/polozenieJG/<int:t>/<int:loopindex>/<int:kartaPomieszczen>/<int:kartaDodatkow>')
+def polozenieJG(t, loopindex, kartaPomieszczen, kartaDodatkow):
+    return JedenGracz.polozenieJG(t, loopindex, kartaPomieszczen,kartaDodatkow)
 
-@app.route('/polozenieWyposazenia1/<int:t>/<int:loopindex>/<int:kartaDodatkow>')
-def polozenieWyposazenia1(t, loopindex, kartaDodatkow):
-    return  JedenGracz.polozenieWyposazenia1(t, loopindex, kartaDodatkow)
+@app.route('/polozenieWyposazeniaJG/<int:t>/<int:loopindex>/<int:kartaDodatkow>')
+def polozenieWyposazeniaJG(t, loopindex, kartaDodatkow):
+    return  JedenGracz.polozenieWyposazeniaJG(t, loopindex, kartaDodatkow)
 
 @app.route('/nowaGra')
 def nowaGra():
