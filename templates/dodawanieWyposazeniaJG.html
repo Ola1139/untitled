@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/static/style/style15.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+{{ x }}
+<a href="/JedenGracz"><div class="przycisk">Zrezygnuj z wyposazenia i kolejny gracz</div></a>
+<div class="domek">
+ <table>
+{% for t in domek %}
+    <tr>
+    {% for i in domek[t] %}
+         {% if i != '0' and i != 'dach' and i != 'tlo' %}
+        <td><img src="/static/images/{{ i.nazwa }}.png" alt="karta" class="kartyDomku">
+            {% if i.wyposazenie != 0 %}
+            <br>
+            {{i.wyposazenie.tytul}}
+        {% endif %}
+            <br>
+            <a href="/polozenieWyposazeniaJG/{{ t }}/{{ loop.index0 }}/{{ kartaDodatkow.id }}"> <div class="przycisk">Poloz tutaj kartę </div></a>
+        {% else %}
+        <td><img src="/static/images/{{ i }}.png" alt="karta" class="kartyDomku">
+        {% endif %}
+
+        </td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+ </table>
+    <h3> Twój ogródek </h3>
+    {% for x in gracz.ogrodek%}
+         Twój ogródek
+    {{x.tytul}}
+ {% endfor %}
+</div>
+<br>
+<h2>Karta do położenia </h2>
+    <br>
+    <img src="/static/images/{{ kartaDodatkow.nazwa }}.png" alt="karta" width="10%">
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wyniki gry</title>
+    <link href="/static/style/style9.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<a href="/nowaGra"><div class="przycisk">Nowa gra</div></a>
+Zwyciężył:
+{% for x in zwyciezca %}
+    <h1>{{ x.nazwa }}</h1>
+    <br> <h1>Ilość punktów: {{ x.punkty }}</h1>
+{% endfor %}
+<br>
+<br>
+{% for a in Druzyna %}
+    <h3>{{ a.nazwa }}</h3>
+    <h3>{{ a.punkty }}</h3>
+    <br>
+ <table>
+{% for t in a.domek %}
+    <tr>
+    {% for i in a.domek[t] %}
+         {% if i != '0' and i != 'dach' and i != 'tlo' %}
+        <td><img src="/static/images/{{ i.nazwa }}.png" alt="karta" width="50%">
+            {% if i.wyposazenie != 0 %}
+            <br>
+            {{i.wyposazenie.tytul}}
+        {% endif %}
+        {% else %}
+        <td><img src="/static/images/{{ i }}.png" alt="karta" width="50%">
+        {% endif %}
+        </td>
+    {% endfor %}
+    </tr>
+{% endfor %}
+ </table>
+    <br>
+
+    {% for x in a.ogrodek%}
+        <h3>Twój ogródek</h3>
+    {{x.tytul}}
+ {% endfor %}
+    <br>
+    <h3>Twoje karty dachu</h3>
+{% for x in a.dach%}
+    <img src="/static/images/{{ x.nazwa }}.png" alt="karta" width="5%">
+ {% endfor %}
+<br>
+{% endfor %}
+
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+html
+{
+    background-color: powderblue;
+}
+
+.talia
+{
+    float: left;
+    width: 47%;
+
+}
+
+.domek
+{
+    float: left;
+    width: 47%;
+}
+
+.kartyTalii
+{
+    width: 80%;
+}
+
+.kartyDomku
+{
+    width: 80%;
+}
+
+.przycisk
+        {
+            background-color: darkseagreen;
+        }
